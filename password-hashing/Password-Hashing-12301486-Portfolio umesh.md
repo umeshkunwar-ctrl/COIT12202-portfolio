@@ -1,4 +1,4 @@
-# Password Hashing Portfolio — Student ID 12301486
+# Password Hashing Portfolio  Student ID 12301486
 
 **Aim:**Learn how to compare password hashing algorithms by creating users using different hash methods, viewing /etc/shadow, and setting up password policies in PAM — and check the difference in cracking speeds with a password cracker.
 
