@@ -1,6 +1,7 @@
-# PKI / OpenSSL CA — Activity Preparation Portfolio
+# PKI / OpenSSL CA  Activity Preparation Portfolio
 
-**Aim (from the OpenSSL CA lab instructions):**OpenSSL CA lab instructions: Create a two-tiered Certificate Authority hierarchy, sign a web server certificate and verify the entire trust chain.
+**Aim (from the OpenSSL CA lab instructions):
+**OpenSSL CA lab instructions: Create a two-tiered Certificate Authority hierarchy, sign a web server certificate and verify the entire trust chain.
 ---
 
 ## Interactive Activity: Identify PKI Components
@@ -17,7 +18,7 @@ The "Identify PKI Components" interactive activity was performed prior to the GN
 
 ---
 
-## OpenSSL CA Lab — Task Overview
+## OpenSSL CA Lab  Task Overview
 
 The interactive activity above contains the concepts that underlie the lab of the OpenSSL CA on GNS3, which is organized as follows:
 
