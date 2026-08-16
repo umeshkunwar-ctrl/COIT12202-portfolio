@@ -1,4 +1,4 @@
-# SSH Hardening Portfolio — Student ID 12301486
+# SSH Hardening Portfolio  Student ID 12301486
 
 **Aim:**  Harden an SSH server with Ed25519 key-based authentication, protect it from brute-force login attempts with fail2ban, and use SSH tunnelling to reach an internal service.
 
@@ -55,7 +55,7 @@ All three restrictions were then verified from `Admin`: key login as `student` s
 
 ---
 
-## Task 5: Block brute-force attempts with fail2ban
+## Task 5: Block brute force attempts with fail2ban
 
 `syslogd` was started on `Server` so that failed logins are recorded, and a `jail.local` override was created with `maxretry = 3`, `findtime = 600`, `bantime = 600`. After `fail2ban-client start`, repeated failed logins against `Server` (as non-existent users) were made from `Bastion`, and the jail status confirmed `Bastion`'s address, `10.10.1.20`, listed under `Banned IP list`.
 
