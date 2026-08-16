@@ -1,4 +1,4 @@
-# Week 1 Tutorial Portfolio — Unit Introduction
+# Week 1 Tutorial Portfolio Unit Introduction
 The previous week (this week) is a tutorial to prepare for the unit. This consists of five sections: Interactive Activities, GitHub Repository setup, GNS3 Re-familiarisation, Group Formation and Moodle Review and Assessments.
 
 ---
@@ -7,7 +7,7 @@ The previous week (this week) is a tutorial to prepare for the unit. This consis
 
 Two interactive activities were completed this week.
 
-### Network Security Architecture — Identify Zones, Devices & Boundaries
+### Network Security Architecture Identify Zones, Devices & Boundaries
 
 In this activity users will be tasked with identifying devices/services in the appropriate security zone (trusted, DMZ, untrusted), matching devices to their zone, answering true/false questions, and answering questions about where to place a firewall, across 8 rounds of questions covering zone identification, device matching, true/false and placement of a firewall.
 
@@ -25,25 +25,25 @@ The activity was completed correctly on the first attempt (3/3 stars).
 
 ---
 
-## GitHub Repository [20 min]
+## GitHub Repository 
 
 As per instructions a personal GitHub account is needed and a private repository called coit12202-portfolio added to the repository with the tutor and Unit Coordinator as collaborators and a link to the repository shared in the Teams General channel.
 
 ---
 
-## GNS3 Re-Familiarisation [30 min]
+## GNS3 Re Familiarisation 
 
 As directed, you should install the GNS3 Appliance in VirtualBox and start the GNS3 VM, finish the GNS3 Intro activity, and then transfer a file from the GNS3 VM to the host machine (such as using WinSCP or FileZilla).
 ---
 
-## Group Formation [20 min]
+## Group Formation 
 
 
 For Assessment 2 a group is to be formed, with one member creating a coit12202-project GitHub repository, adding the other members of the group, and adding the tutor and Unit Coordinator as Collaborators, setting up a Project Kanban board and adding issue "Read the assignment specification" to that board, then posting the team names/IDs and links to the repository and Kanban board in the Teams General channel.
 
 ---
 
-## Review Moodle and Assessments [Homework, 30 min]
+## Review Moodle and Assessments 
 
 As directed, the rest of Moodle is reviewed, particularly the assessments and, optionally, a preview of the GNS3 activities for the next week's tutorial.
 ---
