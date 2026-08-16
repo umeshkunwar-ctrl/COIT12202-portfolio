@@ -1,4 +1,4 @@
-# OpenSSL CA Portfolio — Student ID 12301486
+# OpenSSL CA Portfolio  Student ID 12301486
 
 ## Evidence
 
