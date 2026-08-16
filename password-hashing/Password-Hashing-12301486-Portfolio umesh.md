@@ -1,18 +1,19 @@
 # Password Hashing Portfolio — Student ID 12301486
 
-**Aim:** Compare password hashing algorithms by creating users with different hash types, examining `/etc/shadow`, and configuring PAM password policies — then observe cracking speed differences using a password cracker.
+**Aim:**Learn how to compare password hashing algorithms by creating users using different hash methods, viewing /etc/shadow, and setting up password policies in PAM — and check the difference in cracking speeds with a password cracker.
 
 ---
 
 ## Setup
 
-A single Ubuntu host, `Target`, was added and started for this activity.
+For this activity, a single Ubuntu host (Target) was added and started.
 
 ---
 
 ## Examine Hash Algorithms
 
-Three users were created on `Target`, all with the same student-ID password (`pass12301486`), each hashed with a different algorithm using `mkpasswd` and `useradd -p`: `user_md5` (MD5-crypt), `user_sha512` (SHA-512), and `user_yescrypt` (yescrypt).
+
+The three users were added to the system using the same student-ID password (pass12301486) and with a different algorithms (`mkpasswd -d -a md5 pass12301486 | useradd -p -; mkpasswd -d -a sha512 pass12301486 | useradd -p -; mkpasswd -d -a yescrypt pass12301486 | useradd -p -`), using `MD5-crypt`, `SHA-512`, and `yescrypt`, respectively.
 
 ![mkpasswd and useradd generating the three hash types, and the resulting /etc/shadow entries](pw-images/Password-Hashing-12301486-shadow.png)
 
@@ -24,7 +25,7 @@ user_sha512:$6$3LEgnTeeWV8Vvftr$xgLNyZ3YR81j2mF/kiFJx10v6XvoCLZsS954djxZtCv...:2
 user_yescrypt:$y$j9T$7N6Iz6g41jj6L.cNr2.Uv.$lR8WsthLGmOv7v1M531Z3yoV.OL...:20680:0:99999:7:::
 ```
 
-The three original hashes were left untouched throughout the rest of the activity, as instructed, so they remained valid for the cracking comparison later.
+The three original hashes were not modified throughout the activity as directed, and still could be used for the comparison of the values later in the activity when the values would be cracked.
 
 ---
 
@@ -32,13 +33,13 @@ The three original hashes were left untouched throughout the rest of the activit
 
 ### Password quality (`pam_pwquality`)
 
-`/etc/pam.d/common-password` was backed up, then edited so that `pam_pwquality.so` enforces `retry=3 minlen=12 ucredit=-1 dcredit=-1 enforce_for_root dictcheck=0` (12-character minimum, at least one uppercase letter, at least one digit; `dictcheck=0` because this image ships no cracklib word-list, and `enforce_for_root` so the policy is not merely a warning on the root console).
+The file /etc/pam.d/common-password was backed up, and then modified to include: pam_pwquality.so enforce_for_root=1 retry=3 minlen=12 ucredit=-1 dcredit=-1 dictcheck=0 (12 characters required, one must be upper case, one a digit, and the wordlist is not present; this image is built without any cracklib wordlist, hence the setting of dictcheck=0, and the setting of ucredit=-1 and dcredit=-1 means that the policy is not just a warning on the root console).
 
 ![Backing up common-password and confirming the pam_pwquality line](pw-images/Password-Hashing-12301486-pam-quality.png)
 
 ### Account lockout (`pam_faillock`)
 
-`/etc/pam.d/common-auth` was backed up, then edited to wire in `pam_faillock` around the existing `pam_unix.so` line — a `preauth` call before it, and `authfail`/`authsucc` calls after it — with `deny = 5` and `unlock_time = 300` set in `/etc/security/faillock.conf`.
+The file /etc/pam.d/common-auth was backed up and then edited to include `pam_faillock` calls around the existing `pam_unix.so` call; one before and one after; with `deny = 5` and `unlock_time = 300` in `/etc/security/faillock.conf`.
 
 ![The wired-in common-auth file with pam_faillock preauth/authfail/authsucc in the correct order](pw-images/Password-Hashing-12301486-pam-faillock.png)
 
@@ -46,15 +47,15 @@ The three original hashes were left untouched throughout the rest of the activit
 
 ## Testing the Policies Against `user_test`
 
-A throwaway account, `user_test`, was created for policy testing so the three algorithm users' recorded hashes stayed untouched.
+A throwaway account, user_test, was created to test policies; this way, the hashes recorded by the three algorithm users did not get modified.
 
 ![Creating user_test and confirming its uid/gid after passwd succeeds](pw-images/Password-Hashing-12301486-user-test.png)
 
-**Password quality:** a weak password (`abc`) was rejected by `pam_pwquality` (too short / missing a digit), and a compliant password (12+ characters, an uppercase letter, a digit) was then accepted.
+**Password quality:** A weak password ("abc") was rejected by the "pam_pwquality" module, because it was too short / did not contain a digit; a compliant password (12+ characters, contains an uppercase letter, contains a digit) was then accepted.
 
 ![Testing weak and compliant passwords against user_test, and confirming the pam_pwquality and pam_faillock lines](pw-images/Password-Hashing-12301486-password-policy-test.png)
 
-**Account lockout:** because the console is logged in as `root`, which is exempt from authentication, the counter was tripped by first becoming `user_test` (free, uncounted) and then re-authenticating as `user_test` *from that shell* with a wrong password, repeated five times.
+**Account lockout:** Note that the counter was activated by being put into the `user_test` (free, uncounted) before re-authenticating as user_test (again free, but this time with incorrect password) five times, since the console is logged in as root, and is not required to authenticate..
 
 ![Five failed su - user_test re-authentications from the user_test shell](pw-images/Password-Hashing-12301486-lockout-test.png)
 
@@ -66,7 +67,7 @@ A throwaway account, `user_test`, was created for policy testing so the three al
 
 ## Verify — Cracking the Hashes
 
-The word `password` was confirmed present in `rockyou.txt`, and three more users — `crack_md5`, `crack_sha512`, `crack_yescrypt` — were created with that password, one per algorithm. John the Ripper was then run against `hashes.txt` (extracted from `/etc/shadow`), first with auto-detection (which cracked the MD5 hash immediately) and then with `--format=crypt` for the SHA-512 and yescrypt hashes.
+The word `password` was found in `rockyou.txt`, and three more users were added to the system with that as the password: `crack_md5`, `crack_sha512`, and `crack_yescrypt` each for one of those algorithms. John the Ripper was then executed against `hashes.txt` (which contains hashes from `/etc/shadow`), first using the auto-detection mode, and then with `--format=crypt` for the SHA-512 and yescrypt hash.
 
 ![John the Ripper cracking crack_md5, crack_sha512 and crack_yescrypt, with timing for each run](pw-images/Password-Hashing-12301486-crack.png)
 
@@ -80,38 +81,35 @@ crack_yescrypt:password:20680:0:99999:7:::
 3 password hashes cracked, 0 left
 ```
 
-The MD5-crypt hash was cracked almost instantly (`0:00:00:00`, 100%, ~1422 candidates/second), while the SHA-512 and yescrypt hashes together took a real time of 9.827 seconds at a much lower rate (~10.76–21.52 candidates/second) — a clear, direct demonstration of how much more expensive the slower algorithms are to attack, even at this small scale.
+The MD5-crypt hash was cracked nearly instantaneously (~100%), and the SHA-512 and yescrypt hashes together required a realtime of 9.827 seconds, at a much lower speed (~10.76 – 21.52 candidates/second), which is a direct proof of the increased cost of the slower algorithms to attack.
 
 ---
+### Q1. What do the prefixes `$1$`, `$6$` and`$y$` in `/etc/shadow` represent and how does the choice of algorithm affect password safety?
 
-## Questions
+The prefix at the beginning of the hash section shows which hashing mechanism was employed for the hash: `$1$` signifies MD5-crypt, `$6$` symbolizes SHA-512-crypt whereas `$y$` refers to yescrypt. This is important because different algorithms have different running requirements and principles of implementation — MD5-crypt is an old technique designed to work as fast as possible and being easy to use; SHA-512-crypt is a technique which is called upon many times to delay the operation. Yescrypt is even more advanced — it is a memory-hard algorithm that consumes resources excessively thus diminishing the advantages that special-purpose hardware devices have over normal server. The experiment results illustrate it well — MD5 hash is cracked within seconds, while SHA-512 and yescrypt hashes take much more time even with the identical passwords.
+### Q2: When is the slower hashing algorithm (for example: yescrypt or bcrypt) a better option for password storing knowing that it will result in a heavier server load?
 
-### Q1: What do the prefixes `$1$`, `$6$`, and `$y$` in `/etc/shadow` indicate, and why does the algorithm choice matter for password security?
+ 
+When a legitimate user attempts to log in, only a single hash is calculated for that. Therefore, even if a hashing algorithm takes a fraction of a second to execute, it will go unnoticed for a real user. On the other hand, an attacker who uses a dictionary or a brute force attack needs to recalculate the hash multiple times and run through millions or billions of possibilities using the keys. Thus, a slow hashing algorithm makes it possible for legitimate users to pay very little in case of a single computation, whereas attackers will have to pay a lot due to multiple computations. This is the reason why slow and memory-intensive hashing algorithms are more preferable than fast algorithms.
 
-The prefix at the start of the hash field identifies which hashing algorithm was used to produce it: `$1$` is MD5-crypt, `$6$` is SHA-512-crypt, and `$y$` is yescrypt. This matters because these algorithms differ hugely in how expensive they are to compute — MD5-crypt is a fast, simple hash originally designed for speed rather than resisting attackers, while SHA-512-crypt is deliberately iterated many times to slow it down. yescrypt goes further again: it is a memory-hard algorithm, meaning it is expensive in both CPU time and memory, which specifically blunts the advantage that GPUs and custom cracking hardware normally have over a regular server. The cracking results above show this directly — the MD5 hash fell almost instantly, while the SHA-512 and yescrypt hashes took noticeably longer for the same password.
+What is a salt and what type of attack does it thwart when hashing passwords? Find out the name of the salt in one of the entries of the /etc/shadow file.
 
-### Q2: Why is a slow hashing algorithm (like yescrypt or bcrypt) preferred for password storage, even though it uses more CPU time on the server during legitimate logins?
+The salt is a random value that is generated for each user and is stored attached to the hash, and is used with the password before hashing, so that a user's password is mapped to a different stored hash each time they log in. This will prevent precomputed lookup table and rainbow table attacks: if there is no salt, then an attacker can hash a whole word list once and then be able to generate the password for any matching hash in a compromised database and any matching password across the two different users will be immediately evident. If the attacker has a per-user salt, he must repeat the computation for each hash he guesses. In the `user_sha512` entry, `$6$3LEgnTeeWV8Vvftr$xgLNyZ3YR81j2mF/kiFJx10v6XvoCLZsS954djxZtCv...`, the salt is the segment between the second and third `$` — `3LEgnTeeWV8Vvftr`.
 
-A legitimate login only ever computes one hash per attempt, so even an algorithm that takes a fraction of a second is unnoticeable to a real user. An attacker running a dictionary or brute-force attack, however, needs to compute the hash function millions or billions of times to work through a wordlist or keyspace. Making each individual hash computation slower and more memory-intensive multiplies that total attack cost enormously, while barely affecting the one-off cost paid by a genuine login. That asymmetry — negligible cost for the defender, massive cost for the attacker — is exactly why slow, memory-hard algorithms like yescrypt and bcrypt are preferred for password storage over fast general-purpose hashes.
+### Q4: The module `pam_faillock` is designed to stop the account from being accessed by unwanted people after several unsuccessful login attempts. However, what is the disadvantage of this method, and how can attackers benefit from it?
 
-### Q3: What is a salt in the context of password hashing, and what attack does it prevent? Identify the salt in one of your `/etc/shadow` entries.
-
-A salt is a random value generated per-user and stored alongside the hash, which is combined with the password before hashing so that the same password produces a different stored hash for every user. This prevents precomputed lookup-table and rainbow-table attacks: without a salt, an attacker could hash an entire wordlist once and instantly reverse any matching hash in a breached database, and identical passwords across different users would be immediately visible from matching hashes. With a per-user salt, the attacker has to redo the work for every single hash individually. In the `user_sha512` entry, `$6$3LEgnTeeWV8Vvftr$xgLNyZ3YR81j2mF/kiFJx10v6XvoCLZsS954djxZtCv...`, the salt is the segment between the second and third `$` — `3LEgnTeeWV8Vvftr`.
-
-### Q4: The `pam_faillock` module locks accounts after repeated failures. What is a potential downside of this approach, and how might an attacker exploit it?
-
-The main downside is that lockout policies protect against password guessing at the cost of availability: because the lock triggers on failed attempts regardless of who is making them, an attacker who does not know — and has no intention of guessing — a legitimate user's password can still deliberately submit a handful of wrong passwords against that account purely to lock it out. This turns `pam_faillock` into a denial-of-service tool rather than a defence: the attacker never needs to succeed, only to fail five times, to lock a real user out of their own account for the configured `unlock_time` (300 seconds here, but potentially repeated indefinitely to keep the account locked). This is a genuine trade-off in the design, and is one reason lockout policies are sometimes paired with other measures, such as per-source rate limiting, rather than being relied on in isolation.
+The disadvantage is that the lock mechanism is useful in preventing successful password guessing, while compromising the availability of the account. The reason for this is that the lock mechanism gets activated every time a wrong password is used, which means that the person attempting to perform a guessing attack does not need to know any actual passwords to be successful. Thus `pam_faillock` turns from the security system into a denial-of-service attack tool. The main thing is that attackers do not need to guess anything correctly.  A number of failed attempts is enough for a successful lock of a legitimate user account for a specific period of time.
 
 ---
 
 ## Reflection
 
-This activity made the practical difference between hashing algorithms far more concrete than reading about them in the abstract. Generating the same password under three different algorithms and then watching them get cracked at very different speeds — the MD5 hash falling almost instantly while the SHA-512 and yescrypt hashes together still took under ten seconds even for a password straight out of `rockyou.txt` — was a genuinely useful demonstration of exactly why algorithm choice matters, and it made the deliberate design trade-off of slow, memory-hard hashing feel obvious rather than theoretical.
+This exercise provided a clear understanding and helped put hashing algorithms into practice while comparing how fast the three hashing algorithms could break various passwords. This allowed us to understand the difference between the hashing algorithms and the reason that hashing is deliberately slow. 
 
-Configuring `pam_pwquality` and `pam_faillock` also reinforced how order-sensitive and easy to misconfigure PAM stacks are: the `dictcheck=0` requirement, the `enforce_for_root` flag, and the exact placement of the `pam_faillock` lines around `pam_unix.so` in `common-auth` were all details that would silently break the intended behaviour if missed — a *valid* password erroring out instead of being accepted, or a weak password on the root console succeeding with only a warning, or failed attempts being counted but never actually enforced. Backing up `common-auth` before editing it turned out to be a sensible precaution given how easily a single misplaced line can lock authentication itself.
+The second phase was easy, as it showed us how equally tricky to configure PAM modules it can be. The requirements like `dictcheck=0`, `enforce_for_root`, and the unusual placement of the lines involving `pam_faillock` around `pam_unix.so` could be easily missed, which would lead to one of the two extreme results, such as the Invalid password being accepted or weak password being accepted by the root account without any alerts. 
 
-Testing the lockout policy was the most counter-intuitive part: needing to become `user_test` first (since root is exempt from authentication) and then re-authenticate as `user_test` *from within that shell* to actually trip the counter was not something I would have guessed without the hint, but it made the distinction between "authenticated as root" and "authenticated as the target user" very clear.
+Testing the lockout policy turned out to be the most surprising part of the exercise; I would never think of starting from `user_test` because authentication is off for root, so I would probably end up with a broken lockout policy if I didn’t know how to act.
 
 ## Conclusion
 
-This activity successfully compared three password hashing algorithms — MD5-crypt, SHA-512-crypt, and yescrypt — by creating matching users, examining their `/etc/shadow` entries, and cracking a shared, wordlist-guessable password under each algorithm with John the Ripper. The results showed a clear, measurable slowdown from MD5 through to yescrypt, directly illustrating why modern systems default to slow, memory-hard hashing for password storage. Alongside this, `pam_pwquality` was configured to enforce a minimum-length, mixed-character password policy, and `pam_faillock` was configured to lock accounts after five failed attempts, with both policies verified against a disposable `user_test` account rather than the algorithm-comparison users. Together, the tasks met the aim of the activity: a working demonstration of how hash algorithm choice, salting, and PAM-enforced password policy each contribute to — and each have limits within — a system's overall resistance to password attacks.
+The activity managed to compare three password hashing algorithms — MD5-crypt, SHA-512-crypt, and yescrypt — by generating users, analyzing their `/etc/shadow` entries, and cracking a common password with the help of John the Ripper for each algorithm. The results revealed a clear slowdown, which starts from MD5 and goes to yescrypt, effectively showing the reason why contemporary systems prefer slow memory-hard algorithm for password hashing. In addition, `pam_pwquality` was set up with a minimum-length, mixed-letter password requirement, and `pam_faillock` was adjusted to block accounts after five attempts; verification of both settings was done through a perishable `user_test` account and not the users used for the algorithm comparison. Overall, the tasks have accomplished the goal of the activity: practical demonstration of how choice of hashing algorithm, salt, and PAM password policies contribute to systems’ resistance to password attacks.
