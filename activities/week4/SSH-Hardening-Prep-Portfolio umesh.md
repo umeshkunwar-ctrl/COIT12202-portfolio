@@ -1,4 +1,4 @@
-# SSH Hardening — Activity Preparation Portfolio
+# SSH Hardening  Activity Preparation Portfolio
 
 **Aim (from the SSH Hardening lab instructions):** SSH server hardening using Ed25519 keybased authentication, fail2ban and SSH tunnelling to access an internal service.
 
@@ -14,7 +14,7 @@ As a preliminary step before creating the GNS3 lab, an interactive quiz was take
 
 ---
 
-## SSH Hardening Lab — Task Overview
+## SSH Hardening Lab  Task Overview
 
 The quiz above is designed to cover the basics of SSH that are used throughout this lab, and is organized as follows in accordance with the instructions:
 
