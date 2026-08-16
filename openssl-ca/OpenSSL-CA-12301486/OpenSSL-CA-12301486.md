@@ -1,14 +1,4 @@
-![](media/image1.png){width="6.268055555555556in"
-height="5.384722222222222in"}
 
-![](media/image2.png){width="6.268055555555556in"
-height="6.711111111111111in"}
-
-![](media/image3.png){width="6.268055555555556in"
-height="5.418055555555555in"}
-
-![](media/image4.png){width="6.268055555555556in"
-height="5.111805555555556in"}
 
 **Q1. An intermediate CA serves as a different certificate authority
 amid the root CA and server certificate. The root CA provides a
