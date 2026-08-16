@@ -1,7 +1,6 @@
 # Password Hashing — Activity Preparation Portfolio
 
-**Aim (from the Password Hashing lab instructions):** Compare password hashing algorithms by creating users with different hash types, examining `/etc/shadow`, and configuring PAM password policies — then observe cracking speed differences using a password cracker (John the Ripper or hashcat).
-
+**Aim (from the Password Hashing lab instructions):** Demonstrate the differences in password hashing algorithms: create users with different hashing algorithms and look at the differences in the file /etc/shadow; configure PAM password policies; and watch differences in the speed of cracking passwords with a password cracker (John the Ripper or hashcat).
 ---
 
 ## Interactive Activities
@@ -10,39 +9,40 @@ Two interactive activities were completed as preparation before starting the GNS
 
 ### Password Strength & Entropy
 
-8 rounds covering strength rating, true/false, entropy ordering, and mistake identification.
+Stronger, True/False, Entropy ordering and identification of mistakes, in 8 rounds!
 
 ![Password Strength & Entropy — 4/8 (50%)](pw2-images/Screenshot_2026-08-16_114011.png)
 
-**Score: 4/8 (50%).** The result flagged this as an area to revisit — the feedback pointed back to the Password Strength explainer to reinforce the concepts (likely entropy ordering and spotting common password mistakes) before trying again.
+**Score: 4/8 (50%).** This was scored as 4/8 (50%) and the feedback took the user back to the Password Strength explainer to reinforce the concepts (probably entropy ordering and common password pitfalls) and then attempt again.
 
 ### Authentication Sequence
 
 ![Authentication Sequence — 8/8 (100%)](pw2-images/Screenshot_2026-08-16_114556.png)
 
-**Score: 8/8 (100%).** A strong result, with feedback confirming a solid grasp of authentication fundamentals and readiness to move on to MFA and authentication protocols.
+**Score: 8/8 (100%).** A very good score – very good understanding of authentication basics, and preparation to proceed with MFA and authentication protocols.
 
 ---
 
 ## Password Hashing Lab — Task Overview
 
-The two activities above cover foundational concepts (password strength/entropy and authentication flow) that sit alongside the Password Hashing lab, which is structured as follows per the instructions:
+There are two activities above that address fundamental concepts (password strength/entropy and authentication flow) that are meant to be paired with the Password Hashing lab which is organized as follows, according to the instructions:
 
-1. Add a single Ubuntu host, `Target`.
-2. Create three users with the same student-ID password, each hashed with a different algorithm: MD5 (`md5crypt`), SHA-512, and yescrypt.
-3. Examine `/etc/shadow`, identify the algorithm prefix, salt, and hash for each user, and record the full hash strings.
-4. Configure `pam_pwquality` (12-character minimum, an uppercase letter, a digit) and `pam_faillock` (lock after 5 failed attempts for 300 seconds).
-5. Test both policies against a disposable `user_test` account — a weak password rejected then a compliant one accepted, and a lockout triggered by five failed re-authentications.
-6. Create a second set of users (`crack_md5`, `crack_sha512`, `crack_yescrypt`) with a password confirmed to be in `rockyou.txt`, then crack each with John the Ripper or hashcat and compare timing across algorithms.
 
-This lab has not yet been run — no terminal evidence (network screenshot, `/etc/shadow` entries, PAM configuration, or cracking output) has been produced yet. Once completed, that evidence should be added alongside these activities as the main body of the portfolio.
+Add one Ubuntu host, `Target`.
+2. Generate three users using the same student-ID password, with different hashing methods: MD5 (`md5crypt`), SHA-512 and yescrypt.
+3. Look at /etc/shadow, find the algorithm prefix, salt and hash used for each user and document the entire hash string.
+4. Set up the following: `pam_pwquality` (with a minimum length of 12 characters, an upper case letter, a digit), and `pam_faillock` (lock after 5 failed attempts for 300 seconds).
+5. Test both the policies with a disposable `user_test` account, a weak password is denied, and a compliant one is accepted, and a lockout is applied with 5 failed re-authentications.
+Make another set of users (crack_md5, crack_sha512, crack_yescrypt), where the password is known to be in rockyou.txt, and then crack each of them using john or hashcat and compare the timings of the algorithms.
+
+This lab has not been executed, no terminal evidence (screenshots of the network, entries in /etc/shadow, PAM configuration, etc.) has been created yet, nor has any cracking output been created. That evidence should then be included with these activities as the portfolio's main body once they have been completed.
 
 ---
 
 ## Reflection
 
-The Password Strength & Entropy activity was the more useful of the two precisely because it went badly first — a 50% score is a clear signal that entropy ordering and picking out common password mistakes aren't as intuitive as they seem, which is worth knowing before the lab asks for password-policy configuration and cracking comparisons that depend on that same reasoning. The Authentication Sequence activity, by contrast, confirmed that the general flow of how authentication happens is already solid, which should make the PAM configuration side of the lab (`pam_pwquality`, `pam_faillock`) easier to follow conceptually, even though the two topics are only loosely connected.
+The Password Strength & Entropy activity was the more useful of the two, just because it failed first — a 50% score is a clear reminder that entropy ordering and picking out common password mistakes do not make them as easy to use as they sound; something that's useful to know before the lab asks you for password-policy configuration and cracking comparisons based on that assumption. The Authentication Sequence, on the other hand, confirmed that the overall process in which authentication is performed is sound and will make it easier to follow conceptually on the PAM configuration side of the lab (`pam_pwquality`, `pam_faillock`).
 
 ## Conclusion
 
-This portfolio currently documents two preparatory activities for the Password Hashing lab: a 4/8 attempt at Password Strength & Entropy, flagged for review, and a clean 8/8 on Authentication Sequence. The weaker result points to entropy and password-strength concepts as worth revisiting before relying on them in the lab's cracking-comparison task. The lab itself — creating the three hash-type users, examining `/etc/shadow`, configuring PAM policies, and cracking a matched set of hashes to compare algorithm speed — is outlined above from the instructions but has not yet been carried out; the next step is to complete that lab and add its evidence (the `/etc/shadow` screenshot, PAM configuration, and cracking tool output) to this portfolio.
+Currently, there are two prep activities in this portfolio for Password Hashing lab; one 4/8 on Password Strength & Entropy, and one 8/8 on Authentication Sequence, both of which were flagged for review. The weaker suggests that concepts such as entropy and password-strength may be reexamined in light of these ideas prior to the use in the lab for the cracking-comparison task. Above are the instructions for performing the lab, but it has not been finished yet; the next steps are to conduct this lab and submit the work to this portfolio (the `/etc/shadow` screenshot, PAM configuration, and output from the cracking tool).
