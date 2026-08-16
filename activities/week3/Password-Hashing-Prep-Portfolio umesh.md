@@ -1,4 +1,4 @@
-# Password Hashing — Activity Preparation Portfolio
+# Password Hashing  Activity Preparation Portfolio
 
 **Aim (from the Password Hashing lab instructions):** Demonstrate the differences in password hashing algorithms: create users with different hashing algorithms and look at the differences in the file /etc/shadow; configure PAM password policies; and watch differences in the speed of cracking passwords with a password cracker (John the Ripper or hashcat).
 ---
@@ -23,7 +23,7 @@ Stronger, True/False, Entropy ordering and identification of mistakes, in 8 roun
 
 ---
 
-## Password Hashing Lab — Task Overview
+## Password Hashing Lab  Task Overview
 
 There are two activities above that address fundamental concepts (password strength/entropy and authentication flow) that are meant to be paired with the Password Hashing lab which is organized as follows, according to the instructions:
 
